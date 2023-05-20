@@ -1,0 +1,22 @@
+
+[{
+    "pic": "jacket.jpg",
+    "name": "Mohan",
+    "desc": "Recycle Boucle Knit Cardigan Pink",
+    "price": "120",
+    "id": 1,
+    "sizes": ["S","M"],
+    "colors":["black","orange","grey"]
+
+},
+{
+    "pic": "shirt.jpg",
+    "name": "shirt",
+    "desc": "casual shirt",
+    "price": "90",
+    "id": 2,
+    "sizes": ["S","M","L"],
+    "colors":["black","orange"]
+    
+}
+]

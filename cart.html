@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Cart</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/87606e3646.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <a href="./index.html" class="x-btn">
+            <p class="mt-4 ms-2 close"> X</p>
+        </a>
+        <h3>CART</h3>
+        <div class="card hidden-cart content" style="border:none;">
+
+        </div>
+        <div class="white-space" style="height: 190px;">
+            <div class="shown-cart mt-5">
+                <p class="justify-content-center align-items-center">
+                    You have no items in your Shopping Bag.
+                </p>
+            </div>
+        </div>
+        <hr class="mx-auto" style="background-color: black; height: 2px; width: 95%;">
+        <div class="row px-1">
+            <h4 class="col-6 d-flex justify-content-start">SUB TOTAL</h4>
+            <h4 class="sub-total col-6 d-flex justify-content-end orange-text"></h4>
+            <p class="shipping my-3">*shipping charges, taxes and discount codes are calculated at the time of
+                accounting.
+            </p>
+        </div>
+        <div class="row mt-2 d-flex justify-content-center py-2" style="background-color: black;">
+
+            <img src="./images/shopping bag2.png" class="col-6 d-flex justify-content-end" alt=""
+                style="width: 60px; height: 30px;">
+            <h4 class="buy-now col-6  d-flex justify-content-start pt-2" style="color: aliceblue; font-size: 16px;">BUY
+                NOW</h4>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- javascript -->
+
+    <script>
+        $.getJSON("https://raw.githubusercontent.com/Rehabmohamed19/ITW-Task9/master/data.json", function (result) {
+            productDetails = result[0];
+
+        })
+        $(function () {
+            let count = 0;
+
+            addToBasket = function () {
+
+                $(".counter").text(count);
+                count++;
+                // console.log(count)
+                $(".counter").text(count);
+
+
+                if (count >= 0) {
+                    // console.log(count)
+                    $(".shown-items").css("display", "none")
+                    $(".hidden-items").css("display", "block")
+                }
+                else {
+                    // console.log(count)
+                    $(".hidden-items").css("display", "none")
+                    $(".shown-items").css("display", "block")
+                }
+
+                const selectedItem = Object.assign({}, productDetails);
+                delete selectedItem.colors;
+                delete selectedItem.sizes;
+                selectedItem.selectedColor = $(".color-selector.selected").data("title");
+                selectedItem.selectedSize = $(".size-selector.selected").data("title");
+                selectedItem.count = count;
+                // console.log(selectedItem);
+
+                localStorage.setItem("selectedItem", JSON.stringify(selectedItem));
+            }
+
+            selectedItem = JSON.parse(localStorage.getItem('selectedItem'));
+            console.log(localStorage.getItem('selectedItem'));
+
+            var price = selectedItem.price
+            var noItems = selectedItem.count;
+            total = price * noItems
+            $(".sub-total").text(total);
+
+
+            if (total == 0) {
+                $(".shown-cart").css("visibility", "visible");
+            }
+            else {
+                // $(".shown-cart").css("display","none");
+                // console.log(selectedItem)
+                $(".content").html(`
+            <div class="row d-flex">
+        <div class="col-4">
+            <img class="img-fluid" src="${selectedItem.pic}" alt="">
+        </div>
+        <div class="col-8">
+            <div class="card-block">
+                <h5 class="pro-title">${selectedItem.name}</h5>
+                <p class="pro-description">
+                ${selectedItem.desc}
+                </p>
+                <div class="row d-flex" style="width:45%;">
+
+                    <i class="fa-solid fa-minus col-4 cart-minus mt-1" onclick="removeFromBasket(this)"
+                        style="color: black; "></i>
+                    <div class="counter col-4" id="counter">${selectedItem.count}</div>
+                    <i class="fa-solid fa-plus col-4 cart-minus mt-1" onclick="addToBasket(this)"
+                        style="color: black; "></i>
+
+                </div>
+                <div class="pro-price orange-text">$${selectedItem.price}</div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="pro-colors d-flex justify-content-between">
+                    <h6 class="mt-1">Color</h6>
+                    <div class="black color-selector selected" data-title="black" onclick="colorSelector(this)">
+                    </div>
+                    <div class="orange color-selector" onclick="colorSelector(this)" data-title="orange"></div>
+                    <div class="grey color-selector" onclick="colorSelector(this)" data-title="grey"></div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="pro-sizes d-flex justify-content-between">
+                    <h6 class="mt-1">Size</h6>
+                    <div class="small text-center size-selector selected" data-title="small"
+                        onclick="sizeSelector(this)">S</div>
+                    <div class="medium text-center size-selector" data-title="medium"
+                        onclick="sizeSelector(this)">M</div>
+                    <div class="large text-center size-selector" data-title="large"
+                        onclick="sizeSelector(this)">L</div>
+                </div>
+            </div>
+        </div>
+    </div> 
+`)
+            }
+            removeFromBasket = function () {
+                selectedItem.count--;
+                $(".counter").text(count);
+                localStorage.removeItem('selectedItem');
+            };
+
+
+            colorSelector = function (elm) {
+                $(".color-selector").removeClass("selected");
+                $(elm).addClass("selected");
+
+            };
+
+            sizeSelector = function (elm) {
+                $(".size-selector").removeClass("selected");
+                $(elm).addClass("selected");
+
+            };
+        });
+    </script>
+</body>
+
+</html>
